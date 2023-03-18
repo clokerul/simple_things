@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  simplethings-api:
+    build: ../api
+    ports:
+      - "8000:5000"
+    volumes:
+      - ../api/src:/api
+    environment:
+      FLASK_DEBUG: "true"
+  simplethings-db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+
+  adminer:
+    image: adminer:4-standalone
+    restart: always
+    ports:
+      - 8080:8080

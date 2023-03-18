@@ -62,23 +62,24 @@ fun Menu(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
     ) {
         MenuCard(
             text = "THE LIST",
-            modifier = modifier.clickable{onClick(Screen.TheListScreen.route)}
+            onClick = {onClick(Screen.MyListScreen.route)},
         )
         MenuCard(
             text = "YOUR LIST",
-            modifier = modifier.clickable{onClick(Screen.MyListScreen.route)}
+            onClick = {onClick(Screen.MyListScreen.route)}
         )
     }
 }
 
 
 @Composable
-fun MenuCard(text: String, modifier: Modifier = Modifier) {
+fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val navController = rememberNavController()
     Box(
         modifier = Modifier
             .padding(vertical = 10.dp)
             .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Text(
             text, modifier = Modifier
