@@ -12,6 +12,7 @@ fun Navigation() {
 
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
         composable(Screen.MainScreen.route) { MainScreen(navController = navController) }
-        composable("theList") {TheListScreen()}
+        composable(Screen.TheListScreen.route) {TheListScreen(navController = navController)}
+        composable(Screen.MyListScreen.route) {TheListScreen(navController = navController)}
     }
 }

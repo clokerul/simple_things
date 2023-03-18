@@ -6,6 +6,6 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun TheListScreen(navController: NavController) {
+fun MyListScreen(navController: NavController) {
     Text("AAAAAAA")
 }
