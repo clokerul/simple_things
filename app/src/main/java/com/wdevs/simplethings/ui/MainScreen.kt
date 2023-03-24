@@ -10,17 +10,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.wdevs.simplethings.Screen
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
+import com.wdevs.simplethings.ui.destinations.MyListScreenDestination
+import com.wdevs.simplethings.ui.destinations.TheListScreenDestination
 
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navigator: DestinationsNavigator) {
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -31,11 +33,17 @@ fun MainScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(color = Color.LightGray)
         ) {
-            val modifier = Modifier
-            Header(text = "George")
-            Menu(
+            // Header
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "George")
+            }
+
+            Body(
                 modifier = Modifier.weight(1F),
-                onClick = { destination: String -> navController.navigate(destination); })
+                onClick = { direction: Direction -> navigator.navigate(direction) })
             Footer(text = "whoami")
         }
     }
@@ -43,17 +51,11 @@ fun MainScreen(navController: NavController) {
 
 @Composable
 fun Header(text: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.End,
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Text(text = text)
-    }
+
 }
 
 @Composable
-fun Menu(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
+fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
     var t = 5;
     Column(
         modifier = modifier
@@ -62,15 +64,14 @@ fun Menu(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
     ) {
         MenuCard(
             text = "THE LIST",
-            onClick = {onClick(Screen.MyListScreen.route)},
+            onClick = {onClick(TheListScreenDestination)},
         )
         MenuCard(
             text = "YOUR LIST",
-            onClick = {onClick(Screen.MyListScreen.route)}
+            onClick = {onClick(MyListScreenDestination)}
         )
     }
 }
-
 
 @Composable
 fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
