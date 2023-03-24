@@ -1,14 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.wdevs.simplethings
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.wdevs.simplethings.ui.MainScreen
 import com.wdevs.simplethings.ui.Navigation
 
@@ -19,10 +16,4 @@ class MainActivity : ComponentActivity() {
             Navigation()
         }
     }
-}
-
-@Preview(showBackground = true, widthDp = 220, heightDp = 400)
-@Composable
-fun DefaultPreview() {
-    Navigation()
 }
