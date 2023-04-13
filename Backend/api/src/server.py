@@ -61,6 +61,10 @@ def postLogin(username, password):
         return f'{user["cookie"]}', 200
     else:
         return 'Denied', 401
+    
+@app.route('/quotes')
+def getQuotes():
+    return jsonify(fetchQuotes())
 
 @app.route('/pathways')
 def getPathways():
