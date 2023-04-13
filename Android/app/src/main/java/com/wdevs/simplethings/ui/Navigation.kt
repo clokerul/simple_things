@@ -1,18 +1,9 @@
 package com.wdevs.simplethings.ui
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.wdevs.simplethings.Screen
+import com.ramcosta.composedestinations.DestinationsNavHost
 
 @Composable
 fun Navigation() {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
-        composable(Screen.MainScreen.route) { MainScreen(navController = navController) }
-        composable(Screen.TheListScreen.route) {TheListScreen(navController = navController)}
-        composable(Screen.MyListScreen.route) {TheListScreen(navController = navController)}
-    }
+    DestinationsNavHost(navGraph = NavGraphs.root)
 }
