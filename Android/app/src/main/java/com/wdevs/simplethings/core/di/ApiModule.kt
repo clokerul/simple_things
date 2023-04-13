@@ -1,6 +1,6 @@
-package com.wdevs.simplethings.core.network.di
+package com.wdevs.simplethings.core.di
 
-import com.wdevs.simplethings.core.network.QuotesApi
+import com.wdevs.simplethings.core.datastore.QuotesApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
