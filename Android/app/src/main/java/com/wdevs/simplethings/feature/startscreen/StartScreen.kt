@@ -75,20 +75,12 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
         MenuCard(
             modifier = modifierMenuCard,
             text = "THE LIST",
-<<<<<<<< HEAD:Android/app/src/main/java/com/wdevs/simplethings/ui/MainScreen.kt
-            onClick = {onClick(Screen.MyListScreen.route)},
-========
             onClick = { onClick(TheListScreenDestination) },
->>>>>>>> 95bf3c0b19d089f063d1f24f9a86d0c2ab97577f:app/src/main/java/com/wdevs/simplethings/feature/startscreen/StartScreen.kt
         )
         MenuCard(
             modifier = modifierMenuCard,
             text = "YOUR LIST",
-<<<<<<<< HEAD:Android/app/src/main/java/com/wdevs/simplethings/ui/MainScreen.kt
-            onClick = {onClick(Screen.MyListScreen.route)}
-========
             onClick = { onClick(MyListScreenDestination) }
->>>>>>>> 95bf3c0b19d089f063d1f24f9a86d0c2ab97577f:app/src/main/java/com/wdevs/simplethings/feature/startscreen/StartScreen.kt
         )
     }
 }
@@ -97,14 +89,7 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
 fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val navController = rememberNavController()
     Box(
-<<<<<<<< HEAD:Android/app/src/main/java/com/wdevs/simplethings/ui/MainScreen.kt
-        modifier = Modifier
-            .padding(vertical = 10.dp)
-            .fillMaxWidth()
-            .clickable { onClick() }
-========
         modifier = modifier
->>>>>>>> 95bf3c0b19d089f063d1f24f9a86d0c2ab97577f:app/src/main/java/com/wdevs/simplethings/feature/startscreen/StartScreen.kt
     ) {
         Text(
             text, modifier = Modifier
