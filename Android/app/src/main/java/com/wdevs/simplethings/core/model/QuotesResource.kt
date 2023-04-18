@@ -1,7 +1,7 @@
 package com.wdevs.simplethings.core.model
 
 data class QuotesResource(
-    val lastItemIndex: String,
+    val author: String,
     val hits: Int,
     val id: Int,
     val isRegret: Boolean,
