@@ -12,14 +12,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
+import com.wdevs.simplethings.core.data.quotes.OFQuotesRepository
+import com.wdevs.simplethings.core.data.quotes.QuotesRepository
+import com.wdevs.simplethings.core.datastore.LocalDataSource
+import com.wdevs.simplethings.core.datastore.QuotesApi
+import com.wdevs.simplethings.core.di.ApiModule
+import com.wdevs.simplethings.core.network.NetworkDataSource
 import com.wdevs.simplethings.ui.destinations.MyListScreenDestination
 import com.wdevs.simplethings.ui.destinations.TheListScreenDestination
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @RootNavGraph(start = true)
 @Destination
@@ -49,7 +60,11 @@ fun MainScreen(navigator: DestinationsNavigator) {
             Footer(modifier = Modifier
                 .padding(vertical = 10.dp)
                 .fillMaxWidth()
-                .clickable { Toast.makeText(context, "to be implemented", Toast.LENGTH_LONG).show() }, text = "whoami")
+                .clickable {
+                    Toast
+                        .makeText(context, "to be implemented", Toast.LENGTH_LONG)
+                        .show()
+                }, text = "whoami")
         }
     }
 }
@@ -71,11 +86,12 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
-        val modifierMenuCard = modifier.padding(horizontal = 0.dp, vertical = 15.dp)
+        val modifierMenuCard = modifier.padding(horizontal = 0.dp, vertical = 12.dp)
         MenuCard(
             modifier = modifierMenuCard,
             text = "THE LIST",
-            onClick = { onClick(TheListScreenDestination) },
+            onClick = {
+                onClick(TheListScreenDestination) },
         )
         MenuCard(
             modifier = modifierMenuCard,
@@ -89,7 +105,7 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
 fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val navController = rememberNavController()
     Box(
-        modifier = modifier
+        modifier = modifier.clickable { onClick() }
     ) {
         Text(
             text, modifier = Modifier
@@ -111,5 +127,36 @@ fun Footer(text: String, modifier: Modifier = Modifier) {
             .fillMaxWidth()
     ) {
         Text(text)
+    }
+}
+
+@Composable
+//@Preview(heightDp = 1000)
+fun PreviewStartScreen() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.LightGray)
+        ) {
+            Header(
+                text = "George",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            Body(
+                modifier = Modifier
+                    .weight(1F)
+                    .fillMaxWidth(),
+                onClick = {  })
+            Footer(modifier = Modifier
+                .padding(vertical = 10.dp)
+                .fillMaxWidth()
+                .clickable {
+                }, text = "whoami")
+        }
     }
 }
