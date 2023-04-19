@@ -1,4 +1,4 @@
-package com.wdevs.simplethings.ui
+package com.wdevs.simplethings.feature.thelist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
