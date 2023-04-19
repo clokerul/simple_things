@@ -14,7 +14,7 @@ import javax.inject.Inject
 class NetworkDataSource(
     private val quotesApi: QuotesApi
 ) {
-    private val refreshIntervalMs : Long = 300 * 1000
+    private val refreshIntervalMs : Long = 5 * 1000
 
     suspend fun getQuotes(): List<QuotesResource> = withContext(Dispatchers.IO) {
         quotesApi.getPathways()

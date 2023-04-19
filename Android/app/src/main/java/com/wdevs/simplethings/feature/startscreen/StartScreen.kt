@@ -19,18 +19,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
-import com.wdevs.simplethings.core.data.quotes.OFQuotesRepository
-import com.wdevs.simplethings.core.data.quotes.QuotesRepository
-import com.wdevs.simplethings.core.datastore.LocalDataSource
-import com.wdevs.simplethings.core.datastore.QuotesApi
-import com.wdevs.simplethings.core.di.ApiModule
-import com.wdevs.simplethings.core.network.NetworkDataSource
-import com.wdevs.simplethings.ui.destinations.MyListScreenDestination
-import com.wdevs.simplethings.ui.destinations.TheListScreenDestination
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.wdevs.simplethings.feature.destinations.MyListScreenDestination
+import com.wdevs.simplethings.feature.destinations.TheListScreenDestination
 
 @RootNavGraph(start = true)
 @Destination
