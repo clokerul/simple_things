@@ -1,5 +1,6 @@
 package com.wdevs.simplethings.core.data.quotes
 
+import android.util.Log
 import com.wdevs.simplethings.core.datastore.LocalDataSource
 import com.wdevs.simplethings.core.model.QuotesResource
 import com.wdevs.simplethings.core.network.NetworkDataSource
@@ -11,15 +12,16 @@ class OFQuotesRepository(private val localDataSource: LocalDataSource, private v
 ) : QuotesRepository {
 
     val remoteQuotesStream : Flow<List<QuotesResource>> = networkDataSource.quotesStreamFlow
+    val TAG = "OFQuotesRepository"
 
-    override suspend fun getRemoteQuotes() : List<QuotesResource>? {
-        var quotesList : List<QuotesResource>? = null
+    override suspend fun getRemoteQuotes() : List<QuotesResource> {
+        var quotesList : List<QuotesResource> = emptyList()
 
-        print("Getting quotes")
+        Log.d(TAG, "no list")
         withTimeout(remoteFetchTimeoutMs) {
             quotesList = networkDataSource.getQuotes()
         }
-        print(quotesList)
+        Log.d(TAG, quotesList.toString())
 
         return quotesList
     }

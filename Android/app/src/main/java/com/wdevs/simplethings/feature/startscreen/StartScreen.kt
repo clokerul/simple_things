@@ -1,4 +1,4 @@
-package com.wdevs.simplethings.ui
+package com.wdevs.simplethings.feature.startscreen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
