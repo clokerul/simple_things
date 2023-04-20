@@ -1,6 +1,6 @@
 package com.wdevs.simplethings.core.model
 
-data class QuotesResource(
+data class QuoteResource(
     val author: String,
     val hits: Int,
     val id: Int,
