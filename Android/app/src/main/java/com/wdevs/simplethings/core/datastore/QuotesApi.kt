@@ -1,16 +1,20 @@
 package com.wdevs.simplethings.core.datastore
 
-import com.wdevs.simplethings.core.model.QuotesResource
-import retrofit2.Response
+import com.wdevs.simplethings.core.model.QuoteResource
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface QuotesApi {
-    @GET("/pathways")
-    suspend fun getPathways() : List<QuotesResource>
+    @GET("/quotes/pathways")
+    suspend fun getPathways() : List<QuoteResource>
 
-    @GET("/regrets")
-    suspend fun getRegrets() : List<QuotesResource>
+    @GET("/quotes/regrets")
+    suspend fun getRegrets() : List<QuoteResource>
 
     @GET("/quotes")
-    suspend fun getQuotes() : List<QuotesResource>
+    suspend fun getQuotes() : List<QuoteResource>
+
+    @POST("/quotes/add")
+    suspend fun postQuote(@Body quote: QuoteResource)
 }
