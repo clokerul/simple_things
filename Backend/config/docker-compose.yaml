@@ -3,7 +3,7 @@ services:
   simplethings-api:
     build: ../api
     ports:
-      - "8000:5000"
+      - "8080:5000"
     volumes:
       - ../api/src:/api
     environment:

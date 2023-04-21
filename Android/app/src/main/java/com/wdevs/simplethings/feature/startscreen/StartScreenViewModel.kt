@@ -7,6 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class StartScreenViewModel @Inject constructor(val localDataSource: LocalDataSource, val networkDataSource: NetworkDataSource) : ViewModel() {
+class StartScreenViewModel @Inject constructor(val localDataSource: LocalDataSource) : ViewModel() {
 
 }

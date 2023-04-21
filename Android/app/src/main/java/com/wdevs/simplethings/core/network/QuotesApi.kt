@@ -1,4 +1,4 @@
-package com.wdevs.simplethings.core.datastore
+package com.wdevs.simplethings.core.network
 
 import com.wdevs.simplethings.core.model.QuoteResource
 import retrofit2.http.Body

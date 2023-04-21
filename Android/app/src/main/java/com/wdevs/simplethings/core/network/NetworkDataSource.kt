@@ -1,6 +1,5 @@
 package com.wdevs.simplethings.core.network
 
-import com.wdevs.simplethings.core.datastore.QuotesApi
 import com.wdevs.simplethings.core.model.QuoteResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
