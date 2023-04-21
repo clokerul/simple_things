@@ -1,9 +1,9 @@
 package com.wdevs.simplethings.core.model
 
 data class QuoteResource(
-    val author: String,
-    val hits: Int,
-    val id: Int,
-    val isRegret: Boolean,
+    val author: String = "unknown",
+    val hits: Int = 0,
+    val id: Int = 0,
+    val isRegret: Boolean = false,
     val quote: String,
 )

@@ -4,15 +4,15 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
@@ -25,7 +25,7 @@ import com.wdevs.simplethings.feature.destinations.TheListScreenDestination
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun MainScreen(navigator: DestinationsNavigator) {
+fun StartScreen(navigator: DestinationsNavigator) {
     // A surface container using the 'background' color from the theme
     val context = LocalContext.current
     Surface(
@@ -61,11 +61,13 @@ fun MainScreen(navigator: DestinationsNavigator) {
 
 @Composable
 fun Header(text: String, modifier: Modifier = Modifier) {
+    var text by remember { mutableStateOf("George") }
+
     Row(
         horizontalArrangement = Arrangement.End,
         modifier = modifier
     ) {
-        Text(text = text)
+        BasicTextField(value = text , onValueChange = {text = it})
     }
 }
 

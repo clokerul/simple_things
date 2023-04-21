@@ -54,23 +54,33 @@ android {
 
 dependencies {
 
-    // Retrofit
+    /* Retrofit */
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    // Retrofit with Scalar Converter
+    /* Retrofit with Scalar Converter */
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 
-    // Compose Destinations
+    /* Compose Destinations */
     implementation 'io.github.raamcosta.compose-destinations:core:1.6.36-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.6.36-beta'
 
-    // Dagger hilt
+    /* Dagger hilt */
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
+    /* Nav compose */
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
+    /* Room */
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
+
+    /* Other dependencies */
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
