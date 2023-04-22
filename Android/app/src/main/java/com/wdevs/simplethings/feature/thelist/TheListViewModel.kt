@@ -2,6 +2,7 @@ package com.wdevs.simplethings.feature.thelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wdevs.simplethings.core.data.quotes.QuotesRepository
 import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.model.QuoteResource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,10 @@ sealed interface TheListUiState {
 
 @HiltViewModel
 class TheListViewModel @Inject constructor(
-    private val quotesRepositoryImpl: QuotesRepositoryImpl
+    private val quotesRepository: QuotesRepository
 ) : ViewModel() {
     val uiState: StateFlow<TheListUiState> =
-        quotesRepositoryImpl.remoteQuotesStream.map { quotes ->
+        (quotesRepository as QuotesRepositoryImpl).remoteQuotesStream .map { quotes ->
             TheListUiState.Success(quotes)
         }.stateIn(
             scope = viewModelScope,
@@ -27,9 +28,15 @@ class TheListViewModel @Inject constructor(
             initialValue = TheListUiState.Loading
         )
 
-    fun postQuote(quote: QuoteResource) {
+    fun postQuote(quoteResource: QuoteResource) {
         viewModelScope.launch {
-            quotesRepositoryImpl.postQuote(quote)
+            quotesRepository.postQuote(quoteResource)
+        }
+    }
+
+    fun saveQuoteLocally(quoteResource: QuoteResource) {
+        viewModelScope.launch {
+            quotesRepository.saveQuoteLocally(quoteResource)
         }
     }
 }
