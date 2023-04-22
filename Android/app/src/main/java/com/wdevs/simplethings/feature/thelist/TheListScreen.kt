@@ -75,7 +75,6 @@ fun QuotesFeed(quotesList: List<QuoteResource>) {
         userScrollEnabled = false,
         modifier = Modifier
             .fillMaxSize()
-            .offset(y = 100.dp)
             .draggable(
                 orientation = Orientation.Horizontal,
                 // Scrollable state: consuming state changes
