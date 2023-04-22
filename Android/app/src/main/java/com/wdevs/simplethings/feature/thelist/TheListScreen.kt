@@ -45,7 +45,10 @@ fun TheListScreen(
     theListViewModel: TheListViewModel = hiltViewModel()
 ) {
     val theListUiState by theListViewModel.uiState.collectAsStateWithLifecycle()
-    TheListScreenStateless(uiState = theListUiState, theListViewModel::saveQuoteLocally)
+    TheListScreenStateless(
+        uiState = theListUiState,
+        onSaveQuoteLocally = theListViewModel::saveQuoteLocally
+    )
 }
 
 @Composable

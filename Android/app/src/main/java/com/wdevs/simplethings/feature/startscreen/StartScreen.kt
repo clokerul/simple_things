@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -13,7 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -25,49 +32,83 @@ import com.wdevs.simplethings.feature.destinations.TheListScreenDestination
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun StartScreen(navigator: DestinationsNavigator) {
+fun StartScreen(
+    navigator: DestinationsNavigator,
+    startScreenViewModel: StartScreenViewModel = hiltViewModel()
+) {
     // A surface container using the 'background' color from the theme
     val context = LocalContext.current
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.LightGray)
-        ) {
-            Header(
-                text = "George",
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Body(
-                modifier = Modifier
-                    .weight(1F)
-                    .fillMaxWidth(),
-                onClick = { direction: Direction -> navigator.navigate(direction) })
-            Footer(modifier = Modifier
-                .padding(vertical = 10.dp)
-                .fillMaxWidth()
-                .clickable {
-                    Toast
-                        .makeText(context, "to be implemented", Toast.LENGTH_LONG)
-                        .show()
-                }, text = "whoami")
-        }
-    }
+    val startScreenUiState by startScreenViewModel.uiState.collectAsStateWithLifecycle()
+    StartScreenStateless(
+        uiState = startScreenUiState,
+        onMenuClick = { direction: Direction -> navigator.navigate(direction) },
+        onUsernameChange = startScreenViewModel::onUsernameChange)
 }
 
 @Composable
-fun Header(text: String, modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf("George") }
+fun StartScreenStateless(
+    uiState: StartScreenUiState,
+    onMenuClick: (Direction) -> Unit,
+    onUsernameChange: Any
+) {
+    when (uiState) {
+        is StartScreenUiState.Success -> {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.LightGray)
+                ) {
+                    Header(
+                        username = uiState.username,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Body(
+                        modifier = Modifier
+                            .weight(1F)
+                            .fillMaxSize(),
+                        onClick = onMenuClick
+                    )
+                    Footer(
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .fillMaxWidth(),
+                        text = "whoami"
+                    )
+                }
+            }
+        }
+    }
+    // A surface container using the 'background' color from the theme
+    val context = LocalContext.current
 
-    Row(
-        horizontalArrangement = Arrangement.End,
+}
+
+@Composable
+fun Header(username: String, modifier: Modifier = Modifier) {
+    var text by remember { mutableStateOf(username) }
+
+    Column(
+        horizontalAlignment = Alignment.End,
         modifier = modifier
     ) {
-        BasicTextField(value = text , onValueChange = {text = it})
+        Spacer(modifier = Modifier.size(20.dp))
+        Row {
+            BasicTextField(
+                value = text,
+                onValueChange = { text = it.replace("\n", "").substring(0, minOf(it.length, 20)) },
+                textStyle = LocalTextStyle.current.copy(
+                    textAlign = TextAlign.End,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            )
+            Spacer(modifier = Modifier.size(20.dp))
+        }
     }
 }
 
@@ -80,16 +121,35 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
     ) {
         val modifierMenuCard = modifier.padding(horizontal = 0.dp, vertical = 12.dp)
         MenuCard(
-            modifier = modifierMenuCard,
+            modifier = modifierMenuCard.offset(y = 100.dp),
             text = "THE LIST",
             onClick = {
-                onClick(TheListScreenDestination) },
+                onClick(TheListScreenDestination)
+            },
         )
         MenuCard(
-            modifier = modifierMenuCard,
-            text = "YOUR LIST",
+            modifier = modifierMenuCard.offset(y = (-100).dp),
+            text = "MY LIST",
             onClick = { onClick(MyListScreenDestination) }
         )
+    }
+}
+
+@Composable
+fun Footer(text: String, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                Toast
+                    .makeText(context, "to be implemented", Toast.LENGTH_LONG)
+                    .show()
+            }
+    ) {
+        Text(text)
     }
 }
 
@@ -97,58 +157,30 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
 fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val navController = rememberNavController()
     Box(
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier, contentAlignment = Alignment.Center
     ) {
-        Text(
-            text, modifier = Modifier
-                .align(Alignment.Center)
-        )
         Spacer(
             modifier = Modifier
-                .matchParentSize()
-                .background(color = Color.Gray.copy(alpha = 0.3f))
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(color = Color.Gray.copy(0.3f))
+                .clickable { onClick() },
+        )
+        Text(
+            text,
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center,
         )
     }
 }
 
 @Composable
-fun Footer(text: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.End,
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Text(text)
-    }
-}
-
-@Composable
-//@Preview(heightDp = 1000)
+@Preview(heightDp = 800, widthDp = 400)
 fun PreviewStartScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.LightGray)
-        ) {
-            Header(
-                text = "George",
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Body(
-                modifier = Modifier
-                    .weight(1F)
-                    .fillMaxWidth(),
-                onClick = {  })
-            Footer(modifier = Modifier
-                .padding(vertical = 10.dp)
-                .fillMaxWidth()
-                .clickable {
-                }, text = "whoami")
-        }
-    }
+    StartScreenStateless(
+        uiState = StartScreenUiState.Success("George"),
+        onMenuClick = {},
+        onUsernameChange = {}
+    )
 }

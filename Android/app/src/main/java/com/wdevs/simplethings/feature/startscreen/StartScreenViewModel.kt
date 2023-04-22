@@ -1,12 +1,24 @@
 package com.wdevs.simplethings.feature.startscreen
 
 import androidx.lifecycle.ViewModel
-import com.wdevs.simplethings.core.datastore.LocalDataSource
-import com.wdevs.simplethings.core.network.NetworkDataSource
+import androidx.lifecycle.viewModelScope
+import com.wdevs.simplethings.core.data.profile.ProfileRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class StartScreenViewModel @Inject constructor(val localDataSource: LocalDataSource) : ViewModel() {
 
+sealed interface StartScreenUiState {    data class Success(val username: String) : StartScreenUiState
+}
+@HiltViewModel
+class StartScreenViewModel @Inject constructor(val profileRepositoryImpl: ProfileRepositoryImpl) : ViewModel() {
+    val uiState: StateFlow<StartScreenUiState> = MutableStateFlow(StartScreenUiState.Success("The Black Castor"))
+
+    fun onUsernameChange(username: String) {
+        viewModelScope.launch {
+            profileRepositoryImpl.changeUsername(username)
+        }
+    }
 }

@@ -6,4 +6,8 @@ class LocalDataSource {
     fun saveQuoteLocally(quoteResource: QuoteResource) {
 
     }
+
+    fun changeUsername(username: String) {
+
+    }
 }

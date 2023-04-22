@@ -20,6 +20,10 @@ class NetworkDataSource(
         quotesApi.postQuote(quote)
     }
 
+    fun changeUsername(username: String) {
+
+    }
+
 
     val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
         while (true) {
@@ -49,7 +53,7 @@ class NetworkDataSource(
                         hits = 73
                     ),
                     QuoteResource(
-                        quote = "Don't submit to a boss before submitting to you husband, family is at all times yours.",
+                        quote = "Don't submit to a boss before submitting to your lover, family is at all times yours and it should come first.",
                         author = "Miruna Gealtu",
                         isRegret = true,
                         hits = 16219
