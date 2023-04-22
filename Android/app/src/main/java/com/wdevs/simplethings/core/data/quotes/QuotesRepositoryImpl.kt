@@ -11,7 +11,11 @@ class QuotesRepositoryImpl @Inject constructor(private val localDataSource: Loca
 ) : QuotesRepository {
 
     val remoteQuotesStream : Flow<List<QuoteResource>> = networkDataSource.quotesStreamFlow
-    override suspend fun postQuote(quote: QuoteResource) {
-        networkDataSource.postQuote(quote)
+    override suspend fun postQuote(quoteResource: QuoteResource) {
+        networkDataSource.postQuote(quoteResource)
+    }
+
+    override suspend fun saveQuoteLocally(quoteResource: QuoteResource) {
+        localDataSource.saveQuoteLocally(quoteResource)
     }
 }
