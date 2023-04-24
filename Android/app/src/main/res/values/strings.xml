@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Simple Things</string>
+    <string name="username">username</string>
 </resources>

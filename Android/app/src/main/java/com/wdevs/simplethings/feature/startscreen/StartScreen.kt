@@ -42,14 +42,15 @@ fun StartScreen(
     StartScreenStateless(
         uiState = startScreenUiState,
         onMenuClick = { direction: Direction -> navigator.navigate(direction) },
-        onUsernameChange = startScreenViewModel::onUsernameChange)
+        onUsernameChange = startScreenViewModel::onUsernameChange
+    )
 }
 
 @Composable
 fun StartScreenStateless(
     uiState: StartScreenUiState,
     onMenuClick: (Direction) -> Unit,
-    onUsernameChange: Any
+    onUsernameChange: (username: String) -> Unit,
 ) {
     when (uiState) {
         is StartScreenUiState.Success -> {
@@ -63,9 +64,10 @@ fun StartScreenStateless(
                         .background(color = Color.LightGray)
                 ) {
                     Header(
-                        username = uiState.username,
+                        username = uiState.username ?: "",
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        onUsernameChange = onUsernameChange
                     )
                     Body(
                         modifier = Modifier
@@ -89,7 +91,11 @@ fun StartScreenStateless(
 }
 
 @Composable
-fun Header(username: String, modifier: Modifier = Modifier) {
+fun Header(
+    username: String,
+    modifier: Modifier = Modifier,
+    onUsernameChange: (username: String) -> Unit,
+) {
     var text by remember { mutableStateOf(username) }
 
     Column(
@@ -100,7 +106,10 @@ fun Header(username: String, modifier: Modifier = Modifier) {
         Row {
             BasicTextField(
                 value = text,
-                onValueChange = { text = it.replace("\n", "").substring(0, minOf(it.length, 20)) },
+                onValueChange = {
+                    text = it.replace("\n", "").substring(0, minOf(it.length, 20))
+                    onUsernameChange(text)
+                },
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.End,
                     fontSize = 12.sp,

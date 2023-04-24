@@ -1,5 +1,8 @@
 package com.wdevs.simplethings.core.di
 
+import android.app.Application
+import com.wdevs.simplethings.core.data.profile.ProfileRepository
+import com.wdevs.simplethings.core.data.profile.ProfileRepositoryImpl
 import com.wdevs.simplethings.core.data.quotes.QuotesRepository
 import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.datastore.LocalDataSource
@@ -36,13 +39,19 @@ object ViewModelModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource() : LocalDataSource {
-        return LocalDataSource()
+    fun provideLocalDataSource(app : Application) : LocalDataSource {
+        return LocalDataSource(app)
     }
 
     @Provides
     @Singleton
     fun provideQuotesRepository(localDataSource: LocalDataSource, networkDataSource: NetworkDataSource) : QuotesRepository {
         return QuotesRepositoryImpl(localDataSource, networkDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(localDataSource: LocalDataSource, networkDataSource: NetworkDataSource) : ProfileRepository {
+        return ProfileRepositoryImpl(localDataSource, networkDataSource)
     }
 }

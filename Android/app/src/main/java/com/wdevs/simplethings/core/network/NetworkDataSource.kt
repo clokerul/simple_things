@@ -12,7 +12,7 @@ class NetworkDataSource(
 ) {
     private val refreshIntervalMs: Long = 5 * 1000
 
-    suspend fun getQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
+    private suspend fun getQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
         quotesApi.getQuotes()
     }
 

@@ -20,7 +20,7 @@ class TheListViewModel @Inject constructor(
     private val quotesRepository: QuotesRepository
 ) : ViewModel() {
     val uiState: StateFlow<TheListUiState> =
-        (quotesRepository as QuotesRepositoryImpl).remoteQuotesStream .map { quotes ->
+        (quotesRepository as QuotesRepositoryImpl).remoteQuotesStream.map { quotes ->
             TheListUiState.Success(quotes)
         }.stateIn(
             scope = viewModelScope,
