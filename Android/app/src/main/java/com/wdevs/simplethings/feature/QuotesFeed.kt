@@ -187,7 +187,7 @@ fun QuoteCard(
                     Text(
                         text = quoteResource.quote,
                         textAlign = TextAlign.Justify,
-                        modifier = Modifier.width((screenWidth - 20).dp)
+                        modifier = Modifier.width((screenWidth - 40).dp)
                     )
                     Spacer(modifier = Modifier.size(20.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
