@@ -35,28 +35,33 @@ class NetworkDataSource(
                     QuoteResource(
                         quote = "Looking back will bring misery and regret, but looking forward.. " +
                                 "you are going to find hope and greatness.",
-                        hits = 5125
+                        hits = 5125,
+                        id = 1
                     ),
                     QuoteResource(
                         quote = "Once you are going to die, so live!",
                         isRegret = true,
-                        hits = 45110
+                        hits = 45110,
+                        id = 2
                     ),
                     QuoteResource(
                         quote = "Your true friends are few, make sure you will stick by them when " +
                                 "hard times come!",
                         author = "Marian Dobre",
-                        hits = 1234
+                        hits = 1234,
+                        id = 3
                     ),
                     QuoteResource(
                         quote = "The real lover is a man who can thrill you by kissing your forehead or smiling into your eyes or just staring into space.",
-                        hits = 73
+                        hits = 73,
+                        id = 4
                     ),
                     QuoteResource(
                         quote = "Don't submit to a boss before submitting to your lover, family is at all times yours and it should come first.",
                         author = "Miruna Gealtu",
                         isRegret = true,
-                        hits = 16219
+                        hits = 16219,
+                        id = 5,
                     )
                 )
             } finally {

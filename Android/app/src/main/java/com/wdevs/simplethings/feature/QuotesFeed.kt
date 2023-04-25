@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,11 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +59,11 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Composable
-fun QuotesFeed(quotesList: List<QuoteResource>, onSaveQuoteLocally: (QuoteResource) -> Unit) {
+fun QuotesFeed(
+    quotesList: List<QuoteResource>,
+    onQuoteDraggedToBottom: (QuoteResource) -> Unit,
+    isMyFeed: Boolean
+) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     var offsetX by remember { mutableStateOf(0f) }
@@ -114,7 +121,7 @@ fun QuotesFeed(quotesList: List<QuoteResource>, onSaveQuoteLocally: (QuoteResour
             verticalAlignment = Alignment.CenterVertically
         ) {
             items(quotesList) {
-                QuoteCard(it, onSaveQuoteLocally, coroutineScope)
+                QuoteCard(it, onQuoteDraggedToBottom, coroutineScope, isMyFeed)
             }
         }
     }
@@ -123,87 +130,98 @@ fun QuotesFeed(quotesList: List<QuoteResource>, onSaveQuoteLocally: (QuoteResour
 @Composable
 fun QuoteCard(
     quoteResource: QuoteResource,
-    onSaveQuoteLocally: (QuoteResource) -> Unit,
+    onQuoteDraggedToBottom: (QuoteResource) -> Unit,
     coroutineScope: CoroutineScope,
+    isMyFeed: Boolean
 ) {
     val cardColor = if (quoteResource.isRegret) Color(247, 84, 155)
     else Color(89, 240, 197)
+    val screenHeight = LocalConfiguration.current.screenHeightDp
     val screenWidth = LocalConfiguration.current.screenWidthDp
     var offsetY by remember { mutableStateOf(0f) }
-    val context = LocalContext.current
+    var posting by remember { mutableStateOf(false) }
 
-    Card(
-        colors = CardDefaults.cardColors(containerColor = cardColor),
-        modifier = Modifier
-            .width(screenWidth.dp)
-            .offset {
-                IntOffset(0, offsetY.roundToInt())
-            }
-            .scale(if (offsetY > 500) 500 / offsetY else 1f)
-            .padding(horizontal = 15.dp)
-            .draggable(orientation = Orientation.Vertical,
-                state = rememberDraggableState { dragAmount ->
-                    offsetY = (offsetY + dragAmount).coerceIn(-900f, 1000f)
-                    coroutineScope.launch {
-                        if (offsetY > 900) {
-                            Toast
-                                .makeText(context, "Saved to local", Toast.LENGTH_SHORT)
-                                .show()
-                            onSaveQuoteLocally(quoteResource)
+    Box() {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = cardColor),
+            modifier = Modifier
+                .width(screenWidth.dp)
+                .offset {
+                    IntOffset(0, offsetY.roundToInt())
+                }
+                .scale(if (offsetY > 500) 500 / offsetY else 1f)
+                .padding(horizontal = 10.dp)
+                .draggable(orientation = Orientation.Vertical,
+                    state = rememberDraggableState { dragAmount ->
+                        offsetY = (offsetY + dragAmount).coerceIn(-900f, 1000f)
+                        coroutineScope.launch {
+                            if (offsetY > 900 && !posting) {
+                                posting = true
+                                onQuoteDraggedToBottom(quoteResource)
+                            }
                         }
-                    }
-                },
-                onDragStarted = {
-                },
-                onDragStopped = {
-                    coroutineScope.launch {
-                        // Responsible to bring back the card
-                        var velocity = 10
-                        while (abs(offsetY) > velocity * 2) {
-                            offsetY -= if (offsetY > 0) velocity else -velocity;
-                            velocity += 5
-                            delay(10)
+                    },
+                    onDragStarted = {
+                        posting = false
+                    },
+                    onDragStopped = {
+                        coroutineScope.launch {
+                            // Responsible to bring back the card
+                            var velocity = 10
+                            while (abs(offsetY) > velocity * 2) {
+                                offsetY -= if (offsetY > 0) velocity else -velocity;
+                                velocity += 5
+                                delay(10)
+                            }
+                            offsetY = 0f;
                         }
-                        offsetY = 0f;
-                    }
-                }),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp
-        ),
-    ) {
-        Row {
-            Spacer(modifier = Modifier.size(20.dp))
-            Column(
-                modifier = Modifier.width((screenWidth - 70).dp),
-                horizontalAlignment = Alignment.End,
-            ) {
-                Spacer(modifier = Modifier.size(20.dp))
-                Text(text = quoteResource.quote)
-                Text(text = quoteResource.author)
-                Spacer(modifier = Modifier.size(15.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                    }),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            ),
+        ) {
+            Row {
+                Spacer(modifier = Modifier.size(10.dp))
+                Column {
+                    Spacer(modifier = Modifier.size(20.dp))
                     Text(
-                        text = quoteResource.hits.toString(),
-                        fontSize = 20.sp,
-                        color = Color.Red
+                        text = quoteResource.quote,
+                        textAlign = TextAlign.Justify,
+                        modifier = Modifier.width((screenWidth - 20).dp)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
-                    OutlinedButton(
-                        onClick = {},
-                        modifier = Modifier.size(60.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(5.dp, Color.Blue),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.baseline_star_border_24),
-                            contentDescription = "Hit icon"
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = quoteResource.hits.toString(),
+                            fontSize = 20.sp,
+                            color = Color.Red
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = quoteResource.author,
+                            textAlign = TextAlign.End,
+                            modifier = Modifier
+                                .width((screenWidth - 20).dp)
+                                .offset(x = (-10).dp)
                         )
                     }
+                    Spacer(modifier = Modifier.size(15.dp))
+
+
                 }
                 Spacer(modifier = Modifier.size(20.dp))
             }
-            Spacer(modifier = Modifier.size(20.dp))
+        }
+
+        if (!isMyFeed) {
+            OutlinedButton(
+                onClick = {},
+                modifier = Modifier
+                    .size(70.dp)
+                    .offset(x = (screenWidth - 80).dp, y = (screenHeight / 2 - 100).dp),
+                shape = CircleShape,
+                border = BorderStroke(5.dp, cardColor),
+            ) {}
         }
     }
 }

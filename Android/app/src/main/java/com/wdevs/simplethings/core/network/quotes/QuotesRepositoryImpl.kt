@@ -1,10 +1,12 @@
 package com.wdevs.simplethings.core.network.quotes
 
+import android.util.Log
 import com.wdevs.simplethings.core.datastore.LocalDataSource
 import com.wdevs.simplethings.core.model.QuoteResource
 import com.wdevs.simplethings.core.network.NetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlin.math.log
 
 // offline first
 class QuotesRepositoryImpl @Inject constructor(
