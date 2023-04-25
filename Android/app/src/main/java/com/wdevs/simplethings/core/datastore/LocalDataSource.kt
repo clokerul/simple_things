@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.wdevs.simplethings.R
+import com.wdevs.simplethings.core.datastore.database.AppDatabase
+import com.wdevs.simplethings.core.datastore.database.QuoteDao
 import com.wdevs.simplethings.core.model.QuoteResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -12,13 +14,27 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class LocalDataSource @Inject constructor(private val appContext: Application) {
+class LocalDataSource @Inject constructor(
+    private val appContext: Application,
+    private val appDatabase: AppDatabase
+) {
 
     private val sharedPrefs: SharedPreferences =
         appContext.getSharedPreferences("preference_file", Context.MODE_PRIVATE)
+    private val quoteDao: QuoteDao = appDatabase.quoteDao()
 
-    fun saveQuoteLocally(quoteResource: QuoteResource) {
+    val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
+            emit(getLocalQuotes())
+    }
 
+    suspend fun getLocalQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
+        quoteDao.getLocalQuotes()
+    }
+
+    suspend fun saveQuoteLocally(quoteResource: QuoteResource) {
+        withContext(Dispatchers.IO) {
+            quoteDao.insertQuotes(quoteResource)
+        }
     }
 
     suspend fun changeUsername(username: String) = withContext(Dispatchers.IO) {

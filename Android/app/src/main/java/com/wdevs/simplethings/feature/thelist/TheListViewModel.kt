@@ -2,8 +2,8 @@ package com.wdevs.simplethings.feature.thelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wdevs.simplethings.core.data.quotes.QuotesRepository
-import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
+import com.wdevs.simplethings.core.network.quotes.QuotesRepository
+import com.wdevs.simplethings.core.network.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.model.QuoteResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
