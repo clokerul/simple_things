@@ -90,10 +90,9 @@ fun QuotesFeed(
                         },
                         onDragEnd = {
                             val index = if (offsetX > 0) 0 else 1
-                            var itemIndex = 0
 
                             // Decide which item should be scrolled to
-                            itemIndex = if (!scrollNow) {
+                            val itemIndex: Int = if (!scrollNow) {
                                 currentCardIndex
                             } else if (listState.layoutInfo.visibleItemsInfo.size <= 1) {
                                 listState.layoutInfo.visibleItemsInfo[0].index
