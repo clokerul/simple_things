@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun enableEdgeToEdgeDisplay() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        //WindowCompat.setDecorFitsSystemWindows(window, false)
         val windowInsetsController =
             WindowCompat.getInsetsController(window, window.decorView)
         // Configure the behavior of the hidden system bars.
