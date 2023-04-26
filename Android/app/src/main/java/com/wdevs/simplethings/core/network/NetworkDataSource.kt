@@ -11,20 +11,6 @@ class NetworkDataSource(
     private val quotesApi: QuotesApi
 ) {
     private val refreshIntervalMs: Long = 5 * 1000
-
-    private suspend fun getQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
-        quotesApi.getQuotes()
-    }
-
-    suspend fun postQuote(quote: QuoteResource) = withContext(Dispatchers.IO) {
-        quotesApi.postQuote(quote)
-    }
-
-    fun changeUsername(username: String) {
-
-    }
-
-
     val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
         while (true) {
             var quotesList: List<QuoteResource> = emptyList()
@@ -69,5 +55,17 @@ class NetworkDataSource(
                 delay(refreshIntervalMs)
             }
         }
+    }
+
+    private suspend fun getQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
+        quotesApi.getQuotes()
+    }
+
+    suspend fun postQuote(quote: QuoteResource) = withContext(Dispatchers.IO) {
+        quotesApi.postQuote(quote)
+    }
+
+    fun changeUsername(username: String) {
+
     }
 }

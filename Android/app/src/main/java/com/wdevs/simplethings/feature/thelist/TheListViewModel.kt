@@ -1,11 +1,10 @@
 package com.wdevs.simplethings.feature.thelist
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wdevs.simplethings.core.network.quotes.QuotesRepository
-import com.wdevs.simplethings.core.network.quotes.QuotesRepositoryImpl
+import com.wdevs.simplethings.core.data.quotes.QuotesRepository
+import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.model.QuoteResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -40,7 +39,7 @@ class TheListViewModel @Inject constructor(
     fun onQuoteDraggedToBottom(quoteResource: QuoteResource) {
         viewModelScope.launch {
             Log.d(TAG, "onQuoteDraggedToBottom: save quote")
-            quotesRepository.saveQuoteLocally(quoteResource)
+            quotesRepository.saveQuoteLocal(quoteResource)
         }
     }
 }

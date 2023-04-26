@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.wdevs.simplethings.core.data.profile.ProfileRepository
 import com.wdevs.simplethings.core.data.profile.ProfileRepositoryImpl
-import com.wdevs.simplethings.core.network.quotes.QuotesRepository
-import com.wdevs.simplethings.core.network.quotes.QuotesRepositoryImpl
+import com.wdevs.simplethings.core.data.quotes.QuotesRepository
+import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.datastore.LocalDataSource
 import com.wdevs.simplethings.core.datastore.database.AppDatabase
 import com.wdevs.simplethings.core.network.QuotesApi
@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataAccessModule {
-    val BASE_URL = "http://localhost:5000"
+    private const val BASE_URL = "http://localhost:5000"
 
     @Provides
     @Singleton

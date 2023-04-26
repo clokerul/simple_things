@@ -36,13 +36,11 @@ fun StartScreen(
     navigator: DestinationsNavigator,
     startScreenViewModel: StartScreenViewModel = hiltViewModel()
 ) {
-    // A surface container using the 'background' color from the theme
-    val context = LocalContext.current
     val startScreenUiState by startScreenViewModel.uiState.collectAsStateWithLifecycle()
     StartScreenStateless(
         uiState = startScreenUiState,
         onMenuClick = { direction: Direction -> navigator.navigate(direction) },
-        onUsernameChange = startScreenViewModel::onUsernameChange
+        saveUsernameEvent = startScreenViewModel::saveUsername
     )
 }
 
@@ -50,7 +48,7 @@ fun StartScreen(
 fun StartScreenStateless(
     uiState: StartScreenUiState,
     onMenuClick: (Direction) -> Unit,
-    onUsernameChange: (username: String) -> Unit,
+    saveUsernameEvent: (username: String) -> Unit,
 ) {
     when (uiState) {
         is StartScreenUiState.Success -> {
@@ -67,7 +65,7 @@ fun StartScreenStateless(
                         username = uiState.username ?: "",
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onUsernameChange = onUsernameChange
+                        saveUsernameEvent = saveUsernameEvent
                     )
                     Body(
                         modifier = Modifier
@@ -85,16 +83,13 @@ fun StartScreenStateless(
             }
         }
     }
-    // A surface container using the 'background' color from the theme
-    val context = LocalContext.current
-
 }
 
 @Composable
 fun Header(
     username: String,
     modifier: Modifier = Modifier,
-    onUsernameChange: (username: String) -> Unit,
+    saveUsernameEvent: (username: String) -> Unit,
 ) {
     var text by remember { mutableStateOf(username) }
 
@@ -108,7 +103,7 @@ fun Header(
                 value = text,
                 onValueChange = {
                     text = it.replace("\n", "").substring(0, minOf(it.length, 20))
-                    onUsernameChange(text)
+                    saveUsernameEvent(text)
                 },
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.End,
@@ -123,7 +118,6 @@ fun Header(
 
 @Composable
 fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
-    var t = 5;
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -164,7 +158,6 @@ fun Footer(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val navController = rememberNavController()
     Box(
         modifier = modifier, contentAlignment = Alignment.Center
     ) {
@@ -190,6 +183,6 @@ fun PreviewStartScreen() {
     StartScreenStateless(
         uiState = StartScreenUiState.Success("George"),
         onMenuClick = {},
-        onUsernameChange = {}
+        saveUsernameEvent = {}
     )
 }

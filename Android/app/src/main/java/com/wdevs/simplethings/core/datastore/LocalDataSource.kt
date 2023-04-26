@@ -16,39 +16,41 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
-    private val appContext: Application, private val appDatabase: AppDatabase
+    private val appContext: Application, appDatabase: AppDatabase
 ) {
-    private final val TAG = "LocalDataSource"
+    companion object {
+        private const val TAG = "LocalDataSource"
+    }
+    private val quoteDao: QuoteDao = appDatabase.quoteDao()
     private val sharedPrefs: SharedPreferences =
         appContext.getSharedPreferences("preference_file", Context.MODE_PRIVATE)
-    private val quoteDao: QuoteDao = appDatabase.quoteDao()
 
     val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
         val value = getLocalQuotes()
         delay(1000)
         emit(value)
-        Log.d(TAG, ": emitedNewQuotes")
+        Log.d(TAG, ": emittedNewQuotes")
     }
 
-    suspend fun getLocalQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
-        quoteDao.getLocalQuotes()
-    }
-
-    suspend fun saveQuoteLocally(quoteResource: QuoteResource) {
+    suspend fun saveQuoteLocal(quoteResource: QuoteResource) {
         withContext(Dispatchers.IO) {
             quoteDao.insertQuotes(quoteResource)
             Log.d(TAG, "saveQuoteLocally: ")
         }
     }
 
-    suspend fun changeUsername(username: String) = withContext(Dispatchers.IO) {
+    suspend fun saveUsernameLocal(username: String) = withContext(Dispatchers.IO) {
         with(sharedPrefs.edit()) {
             putString(appContext.getString(R.string.username), username)
             commit()
         }
     }
 
-    fun getUsername(): String? {
+    suspend fun getLocalQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
+        quoteDao.getLocalQuotes()
+    }
+
+    fun getLocalUsername(): String? {
         return sharedPrefs.getString(appContext.getString(R.string.username), "The Black castor")
     }
 }
