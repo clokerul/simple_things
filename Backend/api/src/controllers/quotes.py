@@ -21,6 +21,7 @@ def postQuote():
     if ("author" not in data):
         data["author"] = "unknown"
     data["hits"] = 0
+    Repo.addQuote(data)
     return "ok", 200
 
 @quotes_page.route('/quotes/pathways', methods = ['GET'])
