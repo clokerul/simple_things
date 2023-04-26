@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="regret">#f7549b</color>
     <color name="pathway">#59f0c5</color>
+    <color name="light_gray">#FFCCCCCC</color>
 </resources>

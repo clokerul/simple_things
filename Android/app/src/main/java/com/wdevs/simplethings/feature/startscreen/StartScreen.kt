@@ -1,12 +1,16 @@
 package com.wdevs.simplethings.feature.startscreen
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -14,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,11 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
+import com.wdevs.simplethings.R
 import com.wdevs.simplethings.feature.destinations.MyListScreenDestination
 import com.wdevs.simplethings.feature.destinations.TheListScreenDestination
 
@@ -54,7 +59,6 @@ fun StartScreenStateless(
         is StartScreenUiState.Success -> {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background,
             ) {
                 Column(
                     modifier = Modifier
@@ -75,7 +79,7 @@ fun StartScreenStateless(
                     )
                     Footer(
                         modifier = Modifier
-                            .padding(vertical = 10.dp)
+                            .padding(10.dp)
                             .fillMaxWidth(),
                         text = "whoami"
                     )
@@ -141,18 +145,28 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
 @Composable
 fun Footer(text: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-
     Row(
-        horizontalArrangement = Arrangement.End,
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                Toast
-                    .makeText(context, "to be implemented", Toast.LENGTH_LONG)
-                    .show()
-            }
     ) {
-        Text(text)
+        Text(text, modifier = Modifier.clickable {
+            Toast
+                .makeText(context, "to be implemented", Toast.LENGTH_LONG)
+                .show()
+        })
+        Spacer(modifier = Modifier.weight(1f))
+        OutlinedButton(
+            onClick = { },
+            border = BorderStroke(1.dp, Color.Black),
+            shape = CircleShape,
+            modifier = Modifier.offset(y = -10.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+        ) {
+            Image(
+                painterResource(R.drawable.baseline_lightbulb_24),
+                contentDescription = "",
+            )
+        }
     }
 }
 
