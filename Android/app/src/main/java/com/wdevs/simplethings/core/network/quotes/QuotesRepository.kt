@@ -1,4 +1,4 @@
-package com.wdevs.simplethings.core.data.quotes
+package com.wdevs.simplethings.core.network.quotes
 
 import com.wdevs.simplethings.core.model.QuoteResource
 
