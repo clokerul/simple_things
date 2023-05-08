@@ -33,9 +33,15 @@ class TheListViewModel @Inject constructor(
             initialValue = TheListUiState.Loading
         )
 
-    fun updateQuote(quoteResource: QuoteResource) {
+    fun onQuoteLike(quoteResource: QuoteResource) {
         viewModelScope.launch {
-            quotesRepository.updateQuote(quoteResource)
+            val hitSign: Int = if (quoteResource.isLiked) -1 else 1
+            quotesRepository.updateQuote(
+                quoteResource.copy(
+                    hits = quoteResource.hits + hitSign * 1,
+                    isLiked = !quoteResource.isLiked
+                )
+            )
         }
     }
 

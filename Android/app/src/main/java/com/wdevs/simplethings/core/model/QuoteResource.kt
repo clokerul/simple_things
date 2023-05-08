@@ -9,5 +9,6 @@ data class QuoteResource(
     val author: String = "unknown",
     val hits: Int = 0,
     val isRegret: Boolean = false,
+    val isLiked: Boolean = false,
     val quote: String,
 )

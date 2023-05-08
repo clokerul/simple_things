@@ -62,6 +62,7 @@ import kotlin.math.roundToInt
 fun QuotesFeed(
     quotesList: List<QuoteResource>,
     onQuoteDraggedToBottom: (QuoteResource) -> Unit,
+    onLikeButtonHit: (QuoteResource) -> Unit,
     isMyFeed: Boolean
 ) {
     val listState = rememberLazyListState()
@@ -120,7 +121,7 @@ fun QuotesFeed(
             verticalAlignment = Alignment.CenterVertically
         ) {
             items(quotesList) {
-                QuoteCard(it, onQuoteDraggedToBottom, coroutineScope, isMyFeed)
+                QuoteCard(it, onQuoteDraggedToBottom, onLikeButtonHit, coroutineScope, isMyFeed)
             }
         }
     }
@@ -130,6 +131,7 @@ fun QuotesFeed(
 fun QuoteCard(
     quoteResource: QuoteResource,
     onQuoteDraggedToBottom: (QuoteResource) -> Unit,
+    onLikeButtonHit: (QuoteResource) -> Unit,
     coroutineScope: CoroutineScope,
     isMyFeed: Boolean
 ) {
@@ -214,7 +216,7 @@ fun QuoteCard(
 
         if (!isMyFeed) {
             OutlinedButton(
-                onClick = {},
+                onClick = {onLikeButtonHit(quoteResource)},
                 modifier = Modifier
                     .size(70.dp)
                     .offset(x = (screenWidth - 80).dp, y = (screenHeight / 2 - 100).dp),

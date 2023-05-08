@@ -28,23 +28,30 @@ fun TheListScreen(
         onQuoteDraggedToBottom = { quoteResource ->
             theListViewModel.onQuoteDraggedToBottom(quoteResource)
             Toast.makeText(context, "Quote saved to your list!", Toast.LENGTH_SHORT).show()
+        },
+        onLikeButtonHit = { quoteResource ->
+            theListViewModel.onQuoteLike(quoteResource)
         }
     )
 }
 
 @Composable
-fun TheListScreenStateless(uiState: TheListUiState, onQuoteDraggedToBottom: (QuoteResource) -> Unit) {
+fun TheListScreenStateless(
+    uiState: TheListUiState,
+    onQuoteDraggedToBottom: (QuoteResource) -> Unit,
+    onLikeButtonHit: (QuoteResource) -> Unit
+) {
     when (uiState) {
         TheListUiState.Loading -> CenterText("Loading")
         is TheListUiState.Success -> {
-            QuotesFeed(uiState.quotesList, onQuoteDraggedToBottom, false)
+            QuotesFeed(uiState.quotesList, onQuoteDraggedToBottom, onLikeButtonHit, false)
         }
     }
 }
 
 @Composable
-fun CenterText(text : String) {
-    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun CenterText(text: String) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text)
     }
 }
