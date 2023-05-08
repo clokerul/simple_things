@@ -8,10 +8,10 @@ class ProfileRepositoryImpl @Inject constructor(private val localDataSource: Loc
     ProfileRepository {
 
     override suspend fun saveUsername(username: String) {
-        localDataSource.saveUsernameLocal(username)
+        localDataSource.saveUsername(username)
     }
 
     override fun getUsername() : String? {
-        return localDataSource.getLocalUsername()
+        return localDataSource.getUsername()
     }
  }

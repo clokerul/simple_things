@@ -18,13 +18,12 @@ class QuotesRepositoryImpl @Inject constructor(
         networkDataSource.postQuote(quoteResource)
     }
 
-    override suspend fun saveQuoteLocal(quoteResource: QuoteResource) {
-        val localQuotes = localDataSource.getLocalQuotes()
+    override suspend fun updateQuote(quoteResource: QuoteResource) {
+        localDataSource.updateQuote(quoteResource)
+        networkDataSource.updateQuote(quoteResource)
+    }
 
-        for (localQuote in localQuotes) {
-            if (localQuote.id == quoteResource.id)
-                return
-        }
-        localDataSource.saveQuoteLocal(quoteResource)
+    override suspend fun saveQuoteLocal(quoteResource: QuoteResource) {
+        localDataSource.saveQuote(quoteResource)
     }
 }

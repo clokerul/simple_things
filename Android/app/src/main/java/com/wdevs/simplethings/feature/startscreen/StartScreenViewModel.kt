@@ -18,13 +18,17 @@ sealed interface StartScreenUiState {
 @HiltViewModel
 class StartScreenViewModel @Inject constructor(private val profileRepositoryImpl: ProfileRepositoryImpl) :
     ViewModel() {
+    companion object {
+        private const val TAG = "StartScreenViewModel"
+    }
+
     private val _uiState =
         MutableStateFlow(StartScreenUiState.Success(profileRepositoryImpl.getUsername()))
     val uiState: StateFlow<StartScreenUiState> = _uiState
 
     fun saveUsername(username: String) {
         viewModelScope.launch {
-            Log.d("ssvm", "onUsernameChange: ")
+            Log.d(TAG, "onUsernameChange: new username [$username]")
             _uiState.value = _uiState.value.copy(username = username)
             profileRepositoryImpl.saveUsername(username)
         }

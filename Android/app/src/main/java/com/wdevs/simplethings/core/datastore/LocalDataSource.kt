@@ -21,36 +21,50 @@ class LocalDataSource @Inject constructor(
     companion object {
         private const val TAG = "LocalDataSource"
     }
+
     private val quoteDao: QuoteDao = appDatabase.quoteDao()
     private val sharedPrefs: SharedPreferences =
         appContext.getSharedPreferences("preference_file", Context.MODE_PRIVATE)
 
+    /* --------------------------------------- FLOWS --------------------------------------- */
     val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
-        val value = getLocalQuotes()
-        delay(1000)
-        emit(value)
+        val localQuotes = withContext(Dispatchers.IO) {
+            quoteDao.getLocalQuotes()
+        }
+        emit(localQuotes)
         Log.d(TAG, ": emittedNewQuotes")
+        delay(1000)
     }
 
-    suspend fun saveQuoteLocal(quoteResource: QuoteResource) {
+    /* --------------------------------------- GET ----------------------------------------- */
+    fun getUsername(): String? {
+        return sharedPrefs.getString(
+            appContext.getString(R.string.username),
+            appContext.getString(R.string.default_username)
+        )
+    }
+
+    /* --------------------------------------- SAVE ---------------------------------------- */
+    suspend fun saveQuote(quoteResource: QuoteResource) {
         withContext(Dispatchers.IO) {
             quoteDao.insertQuotes(quoteResource)
-            Log.d(TAG, "saveQuoteLocally: ")
+            Log.d(TAG, "saveQuoteLocally: $quoteResource")
         }
     }
-
-    suspend fun saveUsernameLocal(username: String) = withContext(Dispatchers.IO) {
+    suspend fun saveUsername(username: String) = withContext(Dispatchers.IO) {
         with(sharedPrefs.edit()) {
             putString(appContext.getString(R.string.username), username)
             commit()
         }
     }
 
-    suspend fun getLocalQuotes(): List<QuoteResource> = withContext(Dispatchers.IO) {
-        quoteDao.getLocalQuotes()
+    /* --------------------------------------- UPDATE --------------------------------------- */
+
+    suspend fun updateQuote(quoteResource: QuoteResource) {
+        withContext(Dispatchers.IO) {
+            quoteDao.updateLocalQuote(quoteResource)
+            Log.d(TAG, "updateLocalQuote: $quoteResource")
+        }
     }
 
-    fun getLocalUsername(): String? {
-        return sharedPrefs.getString(appContext.getString(R.string.username), "The Black castor")
-    }
 }

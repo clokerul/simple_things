@@ -65,7 +65,11 @@ class NetworkDataSource(
         quotesApi.postQuote(quote)
     }
 
-    fun changeUsername(username: String) {
+    fun saveUsername(username: String) {
+        TODO("Implement backend username connections")
+    }
 
+    fun updateQuote(quoteResource: QuoteResource) {
+        TODO("Implement updateQuote")
     }
 }

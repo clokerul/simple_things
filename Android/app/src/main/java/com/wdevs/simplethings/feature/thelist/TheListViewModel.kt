@@ -20,6 +20,10 @@ sealed interface TheListUiState {
 class TheListViewModel @Inject constructor(
     private val quotesRepository: QuotesRepository
 ) : ViewModel() {
+    companion object {
+        private const val TAG = "TheListViewModel"
+    }
+
     val uiState: StateFlow<TheListUiState> =
         (quotesRepository as QuotesRepositoryImpl).remoteQuotesStream.map { quotes ->
             TheListUiState.Success(quotes)
@@ -28,7 +32,12 @@ class TheListViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = TheListUiState.Loading
         )
-    val TAG = "TheListViewModel"
+
+    fun updateQuote(quoteResource: QuoteResource) {
+        viewModelScope.launch {
+            quotesRepository.updateQuote(quoteResource)
+        }
+    }
 
     fun postQuote(quoteResource: QuoteResource) {
         viewModelScope.launch {
