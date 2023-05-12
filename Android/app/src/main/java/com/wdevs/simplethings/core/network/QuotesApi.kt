@@ -17,4 +17,7 @@ interface QuotesApi {
 
     @POST("/quotes/add")
     suspend fun postQuote(@Body quote: QuoteResource)
+
+    @POST("/quotes/update")
+    suspend fun updateQuote(@Body quote: QuoteResource)
 }

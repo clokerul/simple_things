@@ -1,6 +1,5 @@
 package com.wdevs.simplethings.feature.mylist
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -35,7 +34,7 @@ fun MyListScreenStateless(uiState: MyListUiState, onSaveQuoteLocally: (QuoteReso
         MyListUiState.Loading -> CenterText("Importing from local storage..")
         is MyListUiState.Success -> {
             if (uiState.myQuotesList.isEmpty()) CenterText("You can add quotes from the global list")
-            else QuotesFeed(uiState.myQuotesList, onSaveQuoteLocally, true)
+            else QuotesFeed(uiState.myQuotesList, onSaveQuoteLocally, {}, true)
         }
     }
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import com.wdevs.simplethings.R
 import com.wdevs.simplethings.core.datastore.database.AppDatabase
 import com.wdevs.simplethings.core.datastore.database.QuoteDao
+import com.wdevs.simplethings.core.model.LikedQuotes
 import com.wdevs.simplethings.core.model.QuoteResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,6 +45,14 @@ class LocalDataSource @Inject constructor(
         )
     }
 
+    suspend fun getLikedQuotes(): List<LikedQuotes> {
+        val likedQuotes : List<LikedQuotes>
+        withContext(Dispatchers.IO) {
+            likedQuotes = quoteDao.getLikedQuotes()
+        }
+        return likedQuotes
+    }
+
     /* --------------------------------------- SAVE ---------------------------------------- */
     suspend fun saveQuote(quoteResource: QuoteResource) {
         withContext(Dispatchers.IO) {
@@ -51,6 +60,13 @@ class LocalDataSource @Inject constructor(
             Log.d(TAG, "saveQuoteLocally: $quoteResource")
         }
     }
+
+    suspend fun likeQuote(quoteResource: QuoteResource) {
+        withContext(Dispatchers.IO) {
+            quoteDao.insertLikedQuote(LikedQuotes(quoteResource.id));
+        }
+    }
+
     suspend fun saveUsername(username: String) = withContext(Dispatchers.IO) {
         with(sharedPrefs.edit()) {
             putString(appContext.getString(R.string.username), username)

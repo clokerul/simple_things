@@ -24,6 +24,16 @@ def postQuote():
     Repo.addQuote(data)
     return "ok", 200
 
+@quotes_page.route('/quotes/update', methods = ['POST'])
+def updateQuote():
+    data = request.get_json()
+    for quote in Repo.fetchQuotes():
+        if (quote["id"] == data["id"]):
+            quote["author"] = data["author"]
+            quote["hits"] = data["hits"]
+            quote["isRegret"] = data["isRegret"]
+    return "ok", 200
+
 @quotes_page.route('/quotes/pathways', methods = ['GET'])
 def getPathways():
     return filterDataBy(lambda quote : not quote["isRegret"], Repo.fetchQuotes())

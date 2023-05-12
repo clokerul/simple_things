@@ -14,6 +14,10 @@ class QuotesRepositoryImpl @Inject constructor(
     val remoteQuotesStream: Flow<List<QuoteResource>> = networkDataSource.quotesStreamFlow
     val localQuotesStream: Flow<List<QuoteResource>> = localDataSource.quotesStreamFlow
 
+    override suspend fun getLikedQuotes() {
+        return getLikedQuotes()
+    }
+
     override suspend fun postQuote(quoteResource: QuoteResource) {
         networkDataSource.postQuote(quoteResource)
     }

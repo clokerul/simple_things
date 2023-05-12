@@ -1,5 +1,7 @@
 package com.wdevs.simplethings.core.network
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.wdevs.simplethings.core.model.QuoteResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -10,7 +12,7 @@ import kotlinx.coroutines.withContext
 class NetworkDataSource(
     private val quotesApi: QuotesApi
 ) {
-    private val refreshIntervalMs: Long = 5 * 1000
+    private val refreshIntervalMs: Long = 1 * 100
     val quotesStreamFlow: Flow<List<QuoteResource>> = flow {
         while (true) {
             var quotesList: List<QuoteResource> = emptyList()
@@ -52,6 +54,7 @@ class NetworkDataSource(
                 )
             } finally {
                 emit(quotesList)
+                Log.d(TAG, "emmitted list: ")
                 delay(refreshIntervalMs)
             }
         }
@@ -69,7 +72,7 @@ class NetworkDataSource(
         TODO("Implement backend username connections")
     }
 
-    fun updateQuote(quoteResource: QuoteResource) {
-        TODO("Implement updateQuote")
+    suspend fun updateQuote(quoteResource: QuoteResource) {
+        quotesApi.updateQuote(quoteResource)
     }
 }

@@ -6,4 +6,5 @@ interface QuotesRepository {
     suspend fun updateQuote(quoteResource: QuoteResource)
     suspend fun saveQuoteLocal(quoteResource: QuoteResource)
     suspend fun postQuote(quoteResource: QuoteResource)
+    suspend fun getLikedQuotes()
 }

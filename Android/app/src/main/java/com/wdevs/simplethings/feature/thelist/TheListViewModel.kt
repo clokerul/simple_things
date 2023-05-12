@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class LikeableQuoteResource(
+    val quoteResource: QuoteResource,
+    val isLiked : Boolean
+)
+
 sealed interface TheListUiState {
     object Loading : TheListUiState
     data class Success(val quotesList: List<QuoteResource>) : TheListUiState
@@ -35,11 +40,12 @@ class TheListViewModel @Inject constructor(
 
     fun onQuoteLike(quoteResource: QuoteResource) {
         viewModelScope.launch {
-            val hitSign: Int = if (quoteResource.isLiked) -1 else 1
+            val hitSign: Int = 1
+
+            // to be changed to get post method
             quotesRepository.updateQuote(
                 quoteResource.copy(
                     hits = quoteResource.hits + hitSign * 1,
-                    isLiked = !quoteResource.isLiked
                 )
             )
         }
