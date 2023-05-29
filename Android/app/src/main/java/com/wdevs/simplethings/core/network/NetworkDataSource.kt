@@ -2,6 +2,8 @@ package com.wdevs.simplethings.core.network
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.wdevs.simplethings.R
 import com.wdevs.simplethings.core.model.QuoteResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

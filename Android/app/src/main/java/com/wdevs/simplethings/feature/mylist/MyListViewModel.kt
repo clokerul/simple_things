@@ -1,7 +1,11 @@
 package com.wdevs.simplethings.feature.mylist
 
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wdevs.simplethings.R
 import com.wdevs.simplethings.core.data.quotes.QuotesRepository
 import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.model.QuoteResource

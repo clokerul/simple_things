@@ -1,5 +1,6 @@
 package com.wdevs.simplethings.feature.thelist
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +27,7 @@ fun TheListScreen(
     TheListScreenStateless(
         uiState = theListUiState,
         onQuoteDraggedToBottom = { quoteResource ->
-            theListViewModel.onQuoteDraggedToBottom(quoteResource)
+            theListViewModel.onQuoteDraggedToBottom(quoteResource, context)
             Toast.makeText(context, "Quote saved to your list!", Toast.LENGTH_SHORT).show()
         },
         onLikeButtonHit = { quoteResource ->

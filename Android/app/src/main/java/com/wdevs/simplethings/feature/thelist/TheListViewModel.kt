@@ -1,8 +1,15 @@
 package com.wdevs.simplethings.feature.thelist
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wdevs.simplethings.R
 import com.wdevs.simplethings.core.data.quotes.QuotesRepository
 import com.wdevs.simplethings.core.data.quotes.QuotesRepositoryImpl
 import com.wdevs.simplethings.core.model.QuoteResource
@@ -57,10 +64,30 @@ class TheListViewModel @Inject constructor(
         }
     }
 
-    fun onQuoteDraggedToBottom(quoteResource: QuoteResource) {
+    fun onQuoteDraggedToBottom(quoteResource: QuoteResource, context: Context) {
         viewModelScope.launch {
             Log.d(TAG, "onQuoteDraggedToBottom: save quote")
             quotesRepository.saveQuoteLocal(quoteResource)
+        }
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            notify(1, NotificationCompat.Builder(context, "simpleThingsChannel")
+                .setSmallIcon(R.drawable.baseline_lightbulb_24)
+                .setContentTitle("Author " + quoteResource.author)
+                .setContentText(quoteResource.quote.substring(0, 10) + "...").setPriority(NotificationCompat.PRIORITY_DEFAULT).build())
         }
     }
 }
