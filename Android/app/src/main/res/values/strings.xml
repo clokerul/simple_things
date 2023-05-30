@@ -2,4 +2,6 @@
     <string name="app_name">Simple Things</string>
     <string name="username">username</string>
     <string name="default_username">The Black Castor</string>
+    <string name="whoamitext">Hi there,
+        My name is George Lazureanu and I am an independent developer. This application was made to help one another, completely free of charge or ads.</string>
 </resources>

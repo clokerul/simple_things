@@ -1,11 +1,9 @@
 package com.wdevs.simplethings.feature.thelist
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
-import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.wdevs.simplethings.core.model.QuoteResource
 import androidx.compose.runtime.*
@@ -19,7 +17,6 @@ import com.wdevs.simplethings.feature.QuotesFeed
 @Destination
 @Composable
 fun TheListScreen(
-    navController: NavController,
     theListViewModel: TheListViewModel = hiltViewModel()
 ) {
     val theListUiState by theListViewModel.uiState.collectAsStateWithLifecycle()

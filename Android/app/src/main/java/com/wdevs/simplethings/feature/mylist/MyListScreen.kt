@@ -21,7 +21,6 @@ import com.wdevs.simplethings.feature.QuotesFeed
 @Destination
 @Composable
 fun MyListScreen(
-    navController: NavController,
     myListViewModel: MyListViewModel = hiltViewModel()
 ) {
     val myListUiState by myListViewModel.uiState.collectAsStateWithLifecycle()

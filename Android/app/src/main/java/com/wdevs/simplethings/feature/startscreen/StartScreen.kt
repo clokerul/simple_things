@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +33,7 @@ import com.ramcosta.composedestinations.spec.Direction
 import com.wdevs.simplethings.R
 import com.wdevs.simplethings.feature.destinations.MyListScreenDestination
 import com.wdevs.simplethings.feature.destinations.TheListScreenDestination
+import com.wdevs.simplethings.feature.destinations.WhoAmIScreenDestination
 
 @RootNavGraph(start = true)
 @Destination
@@ -45,7 +45,7 @@ fun StartScreen(
     val startScreenUiState by startScreenViewModel.uiState.collectAsStateWithLifecycle()
     StartScreenStateless(
         uiState = startScreenUiState,
-        onMenuClick = { direction: Direction -> navigator.navigate(direction) },
+        navigatoToDestination = { direction: Direction -> navigator.navigate(direction) },
         saveUsernameEvent = startScreenViewModel::saveUsername
     )
 }
@@ -53,7 +53,7 @@ fun StartScreen(
 @Composable
 fun StartScreenStateless(
     uiState: StartScreenUiState,
-    onMenuClick: (Direction) -> Unit,
+    navigatoToDestination: (Direction) -> Unit,
     saveUsernameEvent: (username: String) -> Unit,
 ) {
     when (uiState) {
@@ -69,20 +69,22 @@ fun StartScreenStateless(
                     Header(
                         username = uiState.username ?: "Not Set",
                         modifier = Modifier
-                            .fillMaxWidth().offset(y = 40.dp),
+                            .fillMaxWidth()
+                            .offset(y = 40.dp),
                         saveUsernameEvent = saveUsernameEvent
                     )
                     Body(
                         modifier = Modifier
                             .weight(1F)
                             .fillMaxSize(),
-                        onClick = onMenuClick
+                        onClick = navigatoToDestination
                     )
                     Footer(
                         modifier = Modifier
                             .padding(10.dp)
                             .fillMaxWidth(),
-                        text = "whoami"
+                        text = "whoami",
+                        onClick = navigatoToDestination
                     )
                 }
             }
@@ -144,20 +146,18 @@ fun Body(modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
 }
 
 @Composable
-fun Footer(text: String, modifier: Modifier = Modifier) {
+fun Footer(text: String, modifier: Modifier = Modifier, onClick: (Direction) -> Unit) {
     val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
     ) {
         Text(text, modifier = Modifier.clickable {
-            Toast
-                .makeText(context, "to be implemented", Toast.LENGTH_LONG)
-                .show()
+            onClick(WhoAmIScreenDestination)
         })
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            onClick = { },
+            onClick = {  },
             border = BorderStroke(1.dp, Color.Black),
             shape = CircleShape,
             modifier = Modifier.offset(y = -10.dp),
@@ -197,7 +197,7 @@ fun MenuCard(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun PreviewStartScreen() {
     StartScreenStateless(
         uiState = StartScreenUiState.Success("George"),
-        onMenuClick = {},
+        navigatoToDestination = {},
         saveUsernameEvent = {}
     )
 }
